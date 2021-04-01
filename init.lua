@@ -1,19 +1,7 @@
 local S = minetest.get_translator("mcl_tridents")
 
-minetest.register_craftitem("mcl_tridents:trident", {
-	description = S("Trident"),
-	inventory_image = "mcl_trident_inv.png",
-	groups = {},
-  on_use = function(itemstack, user, pointed_thing)
-      local obj = minetest.add_entity(vector.new(0, 10, 0), "mobs:sheep", {naked = true})
-      if obj then
-         obj:set_acceleration(vector.new(0, -10, 0))
-      end
-end
-  end
-})
 
-local TRIDENT_ENTITY={
+local TRIDENT_ENTITY = {
 	physical = true,
 	pointable = false,
 	visual = "mesh",
@@ -38,12 +26,22 @@ local TRIDENT_ENTITY={
 	_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
 }
 
-local spawn_item = function(self, pos)
-	if not minetest.is_creative_enabled("") then
-		local item = minetest.add_item(pos, "mcl_tridents:trident")
-		item:set_velocity({x=0, y=0, z=0})
-		item:set_yaw(self.object:get_yaw())
-	end
-	mcl_burning.extinguish(self.object)
-	self.object:remove()
-end
+
+
+
+minetest.register_entity("mcl_tridents:trident_entity", TRIDENT_ENTITY)
+
+minetest.register_craftitem("mcl_tridents:trident", {
+	description = S("Trident"),
+	inventory_image = "mcl_trident_inv.png",
+	groups = {},
+    on_use = function(itemstack, user, pointed_thing)
+      local obj = minetest.add_entity(vector.add(user:get_pos(), {x = 0, y = 1, z = 0}), "mcl_tridents:trident_entity")
+      local yaw = user:get_look_horizontal()+1.57079633
+      if obj then
+         obj:set_acceleration(vector.multiply(user:get_look_dir(), 20))
+         obj:set_yaw(yaw)
+      end
+  end
+})
+
