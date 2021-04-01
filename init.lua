@@ -36,7 +36,16 @@ minetest.register_craftitem("mcl_tridents:trident", {
 	description = S("Trident"),
 	inventory_image = "mcl_trident_inv.png",
 	groups = {},
-    on_use = function(itemstack, user, pointed_thing)
+    on_place = function(itemstack, placer, pointed_thing)
+      local obj = minetest.add_entity(vector.add(placer:get_pos(), {x = 0, y = 1.5, z = 0}), "mcl_tridents:trident_entity")
+      local yaw = placer:get_look_horizontal()+math.pi/2
+      if obj then
+         obj:set_velocity(vector.multiply(placer:get_look_dir(), 20))
+         obj:set_acceleration({x=0, y=-GRAVITY, z=0})
+         obj:set_yaw(yaw)
+      end
+    end,
+    on_secondary_use = function(itemstack, user, pointed_thing)
       local obj = minetest.add_entity(vector.add(user:get_pos(), {x = 0, y = 1.5, z = 0}), "mcl_tridents:trident_entity")
       local yaw = user:get_look_horizontal()+math.pi/2
       if obj then
@@ -44,5 +53,5 @@ minetest.register_craftitem("mcl_tridents:trident", {
          obj:set_acceleration({x=0, y=-GRAVITY, z=0})
          obj:set_yaw(yaw)
       end
-  end
+    end
 })
