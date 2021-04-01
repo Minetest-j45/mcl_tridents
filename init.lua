@@ -9,14 +9,14 @@ local TRIDENT_ENTITY = {
 	mesh = "mcl_trident.obj",
 	visual_size = {x=-1, y=1},
 	textures = {"mcl_trident.png"},
-	collisionbox = {-0.19, -0.125, -0.19, 0.19, 0.125, 0.19},
+	collisionbox = {-.1, -.1, -.1, .1, .1, .1},
 	collide_with_objects = false,
 	_fire_damage_resistant = true,
 
 	_lastpos={},
 	_startpos=nil,
-	_damage=1,	-- Damage on impact
-	_is_critical=false, -- Whether this arrow would deal critical damage
+	_damage=8,	-- Damage on impact
+	_is_critical=false,
 	_stuck=false,   -- Whether arrow is stuck
 	_stucktimer=nil,-- Amount of time (in seconds) the arrow has been stuck so far
 	_stuckrechecktimer=nil,-- An additional timer for periodically re-checking the stuck status of an arrow
@@ -55,3 +55,4 @@ minetest.register_craftitem("mcl_tridents:trident", {
       end
     end
 })
+
