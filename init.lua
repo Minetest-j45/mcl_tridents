@@ -11,7 +11,7 @@ local TRIDENT_ENTITY = {
 	visual_size = {x=-1, y=1},
 	textures = {"mcl_trident.png"},
 	collisionbox = {-.1, -.1, -1, .1, .1, 0.5},
-	collide_with_objects = true,
+	collide_with_objects = false,
 	_fire_damage_resistant = true,
 
 	_lastpos={},
