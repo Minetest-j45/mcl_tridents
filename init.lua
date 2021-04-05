@@ -1,6 +1,7 @@
 local S = minetest.get_translator("mcl_tridents")
 
 local GRAVITY = 9.81
+local TRIDENT_DURABILITY = 251
 
 local TRIDENT_ENTITY = {
 	physical = true,
@@ -27,32 +28,40 @@ local TRIDENT_ENTITY = {
 	_deflection_cooloff=0, -- Cooloff timer after an arrow deflection, to prevent many deflections in quick succession
 }
 
-
-
-
 minetest.register_entity("mcl_tridents:trident_entity", TRIDENT_ENTITY)
 
-minetest.register_craftitem("mcl_tridents:trident", {
+local spawn_trident = function(player)
+	local wielditem = player:get_wielded_item()
+	local obj = minetest.add_entity(vector.add(player:get_pos(), {x = 0, y = 1.5, z = 0}), "mcl_tridents:trident_entity")
+	local yaw = player:get_look_horizontal()+math.pi/2
+	if obj then
+		local durability = TRIDENT_DURABILITY
+		local unbreaking = mcl_enchanting.get_enchantment(wielditem, "unbreaking")
+		if unbreaking > 0 then
+			durability = durability * (unbreaking + 1)
+		end
+		wielditem:add_wear(65535/durability)
+		minetest.chat_send_all(wielditem:get_wear())
+		obj:set_velocity(vector.multiply(player:get_look_dir(), 20))
+		obj:set_acceleration({x=0, y=-GRAVITY, z=0})
+		obj:set_yaw(yaw)
+	end
+end
+
+
+minetest.register_tool("mcl_tridents:trident", {
 	description = S("Trident"),
+	_tt_help = S("Launches a trident when you rightclick and it is in your hand"),
+	_doc_items_durability = TRIDENT_DURABILITY,
 	inventory_image = "mcl_trident_inv.png",
-	groups = {},
+	stack_max = 1,
+	groups = {weapon=1,weapon_ranged=1,trident=1,enchantability=1},
+	_mcl_uses = TRIDENT_DURABILITY,
     on_place = function(itemstack, placer, pointed_thing)
-      local obj = minetest.add_entity(vector.add(placer:get_pos(), {x = 0, y = 1.5, z = 0}), "mcl_tridents:trident_entity")
-      local yaw = placer:get_look_horizontal()+math.pi/2
-      if obj then
-         obj:set_velocity(vector.multiply(placer:get_look_dir(), 20))
-         obj:set_acceleration({x=0, y=-GRAVITY, z=0})
-         obj:set_yaw(yaw)
-      end
+      spawn_trident(placer)
     end,
     on_secondary_use = function(itemstack, user, pointed_thing)
-      local obj = minetest.add_entity(vector.add(user:get_pos(), {x = 0, y = 1.5, z = 0}), "mcl_tridents:trident_entity")
-      local yaw = user:get_look_horizontal()+math.pi/2
-      if obj then
-         obj:set_velocity(vector.multiply(user:get_look_dir(), 20))
-         obj:set_acceleration({x=0, y=-GRAVITY, z=0})
-         obj:set_yaw(yaw)
-      end
+      spawn_trident(user)
     end
 })
 
