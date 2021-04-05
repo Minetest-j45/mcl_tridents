@@ -10,8 +10,8 @@ local TRIDENT_ENTITY = {
 	mesh = "mcl_trident.obj",
 	visual_size = {x=-1, y=1},
 	textures = {"mcl_trident.png"},
-	collisionbox = {-.1, -.1, -.1, .1, .1, .1},
-	collide_with_objects = false,
+	collisionbox = {-.1, -.1, -1, .1, .1, 0.5},
+	collide_with_objects = true,
 	_fire_damage_resistant = true,
 
 	_lastpos={},
