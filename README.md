@@ -1,2 +1,2 @@
 # mcl_tridents
-Adds tridents to MineClone2
+Adds tridents to MineClone2.
