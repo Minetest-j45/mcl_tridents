@@ -1,4 +1,13 @@
 local S = minetest.get_translator("mcl_tridents")
+local cooldown = {}
+
+minetest.register_on_joinplayer(function(player)
+	cooldown[player:get_player_name()] = false
+end)
+
+minetest.register_on_leaveplayer(function(player)
+	cooldown[player:get_player_name()] = false
+end)
 
 local GRAVITY = 9.81
 local TRIDENT_DURABILITY = 251
@@ -34,6 +43,17 @@ local spawn_trident = function(player)
 	local wielditem = player:get_wielded_item()
 	local obj = minetest.add_entity(vector.add(player:get_pos(), {x = 0, y = 1.5, z = 0}), "mcl_tridents:trident_entity")
 	local yaw = player:get_look_horizontal()+math.pi/2
+	
+	if cooldown[player:get_player_name()] then
+		return
+	end
+	
+	cooldown[player:get_player_name()] = true
+	
+	minetest.after(3, function()
+		cooldown[player:get_player_name()] = false
+	end)
+	
 	if obj then
 		local durability = TRIDENT_DURABILITY
 		local unbreaking = mcl_enchanting.get_enchantment(wielditem, "unbreaking")
