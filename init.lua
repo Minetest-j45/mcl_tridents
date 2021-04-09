@@ -11,6 +11,7 @@ end)
 
 local GRAVITY = 9.81
 local TRIDENT_DURABILITY = 251
+local TRIDENT_COOLDOWN = 0.91
 
 local TRIDENT_ENTITY = {
 	physical = true,
@@ -50,7 +51,7 @@ local spawn_trident = function(player)
 	
 	cooldown[player:get_player_name()] = true
 	
-	minetest.after(3, function()
+	minetest.after(TRIDENT_COOLDOWN, function()
 		cooldown[player:get_player_name()] = false
 	end)
 	
